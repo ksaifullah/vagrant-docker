@@ -38,3 +38,6 @@ apt-get update > /dev/null
 echo "********************** Install Docker **********************"
 apt-get install docker-ce --assume-yes
 echo "********************** Done **********************"
+
+# Uninstall docker.
+# sudo apt-get purge docker-ce

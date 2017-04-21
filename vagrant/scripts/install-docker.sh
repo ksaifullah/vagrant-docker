@@ -2,8 +2,11 @@
 
 # https://docs.docker.com/engine/installation/linux/ubuntu
 
-which docker &> /dev/null
+# use a frontend that expects no interactive input at all.
+export DEBIAN_FRONTEND=noninteractive
 
+# Check if docker is already installed.
+which docker &> /dev/null
 if [[ $? == 1 ]]; then :
   # If exit status is 1, go and install docker below.
 else

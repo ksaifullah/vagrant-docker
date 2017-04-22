@@ -4,8 +4,8 @@
 export DEBIAN_FRONTEND=noninteractive
 
 # Check if mysql container is already installed.
-IMAGE="$(docker ps -a -q | grep mysql)"
-if [[ $IMAGE != null ]]; then :
+IMAGE="$(docker ps -a | grep mysql)"
+if [[ ! -z $IMAGE ]]; then :
   echo "MySQL container already exists."
   exit 0
 fi

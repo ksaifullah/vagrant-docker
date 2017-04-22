@@ -74,6 +74,6 @@ Vagrant.configure("2") do |config|
   #   apt-get install -y apache2
   # SHELL
   
-  config.vm.provision "shell", path: "./vagrant/scripts/install-docker.sh", name: "install docker"
-
+  config.vm.provision "shell", path: "./vagrant/scripts/install-docker.sh", args: username, name: "install docker"
+  
 end

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+USERNAME=$1
+
 # https://docs.docker.com/engine/installation/linux/ubuntu
 
 # use a frontend that expects no interactive input at all.
@@ -41,3 +43,12 @@ echo "********************** Done **********************"
 
 # Uninstall docker.
 # sudo apt-get purge docker-ce
+
+# Add the docker group if it doesn't already exist.
+groupadd docker &> /dev/null
+
+# Add the default vagrant user to the docker group.
+gpasswd -a $USERNAME docker &> /dev/null
+
+# Restart the Docker daemon.
+service docker restart &> /dev/null

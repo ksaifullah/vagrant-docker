@@ -22,4 +22,5 @@ docker run --name mysqlstation \
   -p 3306:3306 \
   -d mysql:latest
 
-echo "MySQL server ip address: $(docker inspect --format '{{.NetworkSettings.IPAddress}}' mysqlstation)"
+echo "MySQL server ip address: $(docker inspect \
+  --format '{{.NetworkSettings.IPAddress}}' mysqlstation)"

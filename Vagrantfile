@@ -76,5 +76,6 @@ Vagrant.configure("2") do |config|
   
   config.vm.provision "shell", path: "./vagrant/scripts/docker-install.sh", args: username, name: "docker installation"
   config.vm.provision "shell", path: "./vagrant/scripts/docker-mysql.sh", name: "docker container mysql"
+  config.vm.provision "shell", path: "./vagrant/scripts/docker-drupal.sh", name: "docker container drupal"
   
 end

@@ -12,6 +12,7 @@ which docker &> /dev/null
 if [[ $? == 1 ]]; then :
   # If exit status is 1, go and install docker below.
 else
+  echo "Docker already exists."
   exit 0
 fi
 

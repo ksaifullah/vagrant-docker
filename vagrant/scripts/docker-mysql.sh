@@ -21,3 +21,5 @@ docker run --name mysqlstation \
   -e MYSQL_PASSWORD=drupalstation \
   -p 3306:3306 \
   -d mysql:latest
+
+echo "MySQL server ip address: $(docker inspect --format '{{.NetworkSettings.IPAddress}}' mysqlstation)"

@@ -1,8 +1,21 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-hostname = "docker"
-username = "ubuntu"
+# Virtual server.
+HOSTNAME = "docker"
+USERNAME = "ubuntu"
+
+# Mysql server.
+MYSQL_CONTAINER = "mysqlstation"
+MYSQL_ROOT_PASSWORD = "admin"
+MYSQL_DATABASE = "drupalstation"
+MYSQL_USER = "drupalstation"
+MYSQL_PASSWORD = "drupalstation"
+MYSQL_VERSION = "latest"
+
+# Drupal server.
+DRUPAL_CONTAINER = "drupalstation"
+DRUPAL_VERSION = "latest"
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
@@ -16,7 +29,7 @@ Vagrant.configure("2") do |config|
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box = "ubuntu/xenial64"
-  config.ssh.username = username
+  config.ssh.username = USERNAME
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -31,7 +44,7 @@ Vagrant.configure("2") do |config|
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
   config.vm.network "private_network", ip: "192.168.33.10"
-  config.vm.hostname = hostname
+  config.vm.hostname = HOSTNAME
 
   # Create a public network, which generally matched to bridged network.
   # Bridged networks make the machine appear as another physical device on
@@ -74,8 +87,28 @@ Vagrant.configure("2") do |config|
   #   apt-get install -y apache2
   # SHELL
   
-  config.vm.provision "shell", path: "./vagrant/scripts/docker-install.sh", args: username, name: "docker installation"
-  config.vm.provision "shell", path: "./vagrant/scripts/docker-mysql.sh", name: "docker container mysql"
-  config.vm.provision "shell", path: "./vagrant/scripts/docker-drupal.sh", name: "docker container drupal"
+  config.vm.provision "shell",
+    path: "./vagrant/scripts/docker-install.sh",
+    args: USERNAME,
+    name: "docker installation"
+  config.vm.provision "shell",
+    path: "./vagrant/scripts/docker-mysql.sh",
+    args: [
+      MYSQL_CONTAINER,
+      MYSQL_ROOT_PASSWORD,
+      MYSQL_DATABASE,
+      MYSQL_USER,
+      MYSQL_PASSWORD,
+      MYSQL_VERSION
+    ],
+    name: "docker container mysql"
+  config.vm.provision "shell",
+    path: "./vagrant/scripts/docker-drupal.sh",
+    args: [
+      MYSQL_CONTAINER,
+      DRUPAL_CONTAINER,
+      DRUPAL_VERSION
+    ],
+    name: "docker container drupal"
   
 end

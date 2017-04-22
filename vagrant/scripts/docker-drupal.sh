@@ -10,8 +10,13 @@ if [[ ! -z $IMAGE ]]; then :
   exit 0
 fi
 
+# Drupal server parameters.
+MYSQL_CONTAINER=$1
+DRUPAL_CONTAINER=$2
+DRUPAL_VERSION=$3
+ 
 # Download 'mysql' docker image.
-docker pull drupal:latest
+docker pull drupal:$DRUPAL_VERSION
 
 # Check if mysql container is already installed.
 IMAGE="$(docker ps -a | grep mysql)"
@@ -21,10 +26,10 @@ if [[ -z $IMAGE ]]; then :
 fi
 
 # Run the 'mysql' docker image.
-docker run --name drupalstation \
-  --link mysqlstation:mysql \
+docker run --name $DRUPAL_CONTAINER \
+  --link $MYSQL_CONTAINER:mysql \
   -p 80:80 \
-  -d drupal:latest
+  -d drupal:$DRUPAL_VERSION
 
 echo "Drupal server ip address: $(docker inspect \
-  --format '{{.NetworkSettings.IPAddress}}' drupalstation)"
+  --format '{{.NetworkSettings.IPAddress}}' ${DRUPAL_CONTAINER})"

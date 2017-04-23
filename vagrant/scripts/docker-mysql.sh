@@ -10,6 +10,12 @@ if [[ ! -z $IMAGE ]]; then :
   exit 0
 fi
 
+# Stop the execution of a script if a command or pipeline has an error.
+set -e
+
+# Print all executed commands to the terminal
+set -x
+
 # Mysql server parameters.
 MYSQL_CONTAINER=$1
 MYSQL_ROOT_PASSWORD=$2

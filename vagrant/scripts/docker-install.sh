@@ -16,6 +16,12 @@ else
   exit 0
 fi
 
+# Stop the execution of a script if a command or pipeline has an error.
+set -e
+
+# Print all executed commands to the terminal
+set -x
+
 # Update package information.
 apt-get update > /dev/null
 
@@ -46,10 +52,10 @@ echo "********************** Done **********************"
 # sudo apt-get purge docker-ce
 
 # Add the docker group if it doesn't already exist.
-groupadd docker &> /dev/null
+groupadd docker
 
 # Add the default vagrant user to the docker group.
-gpasswd -a $USERNAME docker &> /dev/null
+gpasswd -a $USERNAME docker
 
 # Restart the Docker daemon.
-service docker restart &> /dev/null
+service docker restart

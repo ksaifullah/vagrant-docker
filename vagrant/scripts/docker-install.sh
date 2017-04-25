@@ -52,7 +52,7 @@ echo "********************** Done **********************"
 # sudo apt-get purge docker-ce
 
 # Add the docker group if it doesn't already exist.
-groupadd docker
+getent group docker || groupadd docker
 
 # Add the default vagrant user to the docker group.
 gpasswd -a $USERNAME docker

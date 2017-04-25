@@ -6,16 +6,12 @@ HOSTNAME = "docker"
 USERNAME = "ubuntu"
 
 # Mysql server.
-MYSQL_CONTAINER = "mysqlstation"
-MYSQL_ROOT_PASSWORD = "admin"
-MYSQL_DATABASE = "drupalstation"
-MYSQL_USER = "drupalstation"
-MYSQL_PASSWORD = "drupalstation"
-MYSQL_VERSION = "latest"
+MYSQL_CONTAINER_DEFAULT = "mysqldefault"
+MYSQL_CONTAINER_CUSTOM = "mysqlstation"
 
 # Drupal server.
-DRUPAL_CONTAINER = "drupalstation"
-DRUPAL_VERSION = "latest"
+DRUPAL_CONTAINER_DEFAULT = "drupaldefault"
+DRUPAL_VERSION_DEFAULT = "latest"
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
@@ -92,23 +88,26 @@ Vagrant.configure("2") do |config|
     args: USERNAME,
     name: "docker installation"
   config.vm.provision "shell",
-    path: "./vagrant/scripts/docker-mysql.sh",
+    path: "./vagrant/scripts/docker-mysql-custom.sh",
     args: [
-      MYSQL_CONTAINER,
-      MYSQL_ROOT_PASSWORD,
-      MYSQL_DATABASE,
-      MYSQL_USER,
-      MYSQL_PASSWORD,
-      MYSQL_VERSION
+      MYSQL_CONTAINER_CUSTOM
     ],
-    name: "docker container mysql"
+    name: "docker container mysql custom",
+    run: "always"
+  config.vm.provision "shell",
+    path: "./vagrant/scripts/docker-mysql-default.sh",
+    args: [
+      MYSQL_CONTAINER_DEFAULT
+    ],
+    name: "docker container mysql default",
+    run: "always"
   config.vm.provision "shell",
     path: "./vagrant/scripts/docker-drupal.sh",
     args: [
-      MYSQL_CONTAINER,
-      DRUPAL_CONTAINER,
-      DRUPAL_VERSION
+      MYSQL_CONTAINER_DEFAULT,
+      DRUPAL_CONTAINER_DEFAULT,
+      DRUPAL_VERSION_DEFAULT
     ],
-    name: "docker container drupal"
+    name: "docker container drupal default"
   
 end

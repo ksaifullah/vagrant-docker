@@ -3,9 +3,9 @@
 # Local of sql dump files.
 DUMP="/tmp/dump"
 
-# Exit it the dump directory doesn't exists.
+# Return if the dump directory doesn't exists.
 if [ ! -d ${DUMP} ]; then
-  exit 0
+  return
 fi
 
 # MySQL account credentials.

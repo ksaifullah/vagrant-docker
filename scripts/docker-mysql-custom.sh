@@ -4,6 +4,7 @@
 export DEBIAN_FRONTEND=noninteractive
 
 CONTAINER_NAME=$1
+VOLUME_MOUNT=$2
 
 # Stop the execution of a script if a command or pipeline has an error.
 set -e
@@ -17,7 +18,8 @@ if [ -z "$(docker ps -a | grep ${CONTAINER_NAME})" ]; then
   docker build -t ksaifullah/mysql:latest /vagrant/apps/mysql
 
   # Create a directory to mount mysql data directory.
-  mkdir -p /docker/mount/var/lib/mysql
+  DB_FILES="${VOLUME_MOUNT}/${CONTAINER_NAME}/dbfiles"
+  mkdir -p $DB_FILES
 
   # Run the container.
   docker run \
@@ -25,8 +27,11 @@ if [ -z "$(docker ps -a | grep ${CONTAINER_NAME})" ]; then
     -h mysql.station \
     -v /vagrant/data/mysql/dump:/tmp/dump \
     -v /vagrant/data/mysql/etc:/etc/mysql \
-    -v /docker/mount/var/lib/mysql:/var/lib/mysql \
+    -v ${DB_FILES}:/var/lib/mysql \
     -d ksaifullah/mysql:latest
+
+  # Let mysql import the db dump.
+  sleep 2m
 else
   if [ -z "$(docker ps | grep ${CONTAINER_NAME})" ]; then
     docker start ${CONTAINER_NAME}

@@ -11,7 +11,10 @@ MYSQL_CONTAINER_CUSTOM = "mysqlstation"
 
 # Drupal server.
 DRUPAL_CONTAINER_DEFAULT = "drupaldefault"
-DRUPAL_VERSION_DEFAULT = "latest"
+DRUPAL_CONTAINER_AABSS = "drupalaabss"
+
+# Volume mount.
+VOLUME_MOUNT = "/docker/mount"
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
@@ -39,7 +42,7 @@ Vagrant.configure("2") do |config|
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
-  config.vm.network "private_network", ip: "192.168.33.10"
+  config.vm.network "private_network", ip: "192.168.33.20"
   config.vm.hostname = HOSTNAME
 
   # Create a public network, which generally matched to bridged network.
@@ -51,7 +54,9 @@ Vagrant.configure("2") do |config|
   # the path on the host to the actual folder. The second argument is
   # the path on the guest to mount the folder. And the optional third
   # argument is a set of non-required options.
-  # config.vm.synced_folder "./apps", "/apps"
+  config.vm.synced_folder "../www", "/var/www", id: "vagrant-www",
+    owner: "www-data",
+    group: "www-data"
 
   # Provider-specific configuration so you can fine-tune various
   # backing providers for Vagrant. These expose provider-specific options.
@@ -84,30 +89,40 @@ Vagrant.configure("2") do |config|
   # SHELL
   
   config.vm.provision "shell",
-    path: "./vagrant/scripts/docker-install.sh",
+    path: "./scripts/docker-install.sh",
     args: USERNAME,
     name: "docker installation"
   config.vm.provision "shell",
-    path: "./vagrant/scripts/docker-mysql-custom.sh",
+    path: "./scripts/docker-mysql-custom.sh",
     args: [
-      MYSQL_CONTAINER_CUSTOM
+      MYSQL_CONTAINER_CUSTOM,
+      VOLUME_MOUNT
     ],
     name: "docker container mysql custom",
     run: "always"
+  # config.vm.provision "shell",
+  #   path: "./scripts/docker-mysql-default.sh",
+  #   args: [
+  #     MYSQL_CONTAINER_DEFAULT
+  #   ],
+  #   name: "docker container mysql default",
+  #   run: "always"
+  # config.vm.provision "shell",
+  #   path: "./scripts/docker-drupal-default.sh",
+  #   args: [
+  #     DRUPAL_CONTAINER_DEFAULT,
+  #     MYSQL_CONTAINER_DEFAULT
+  #   ],
+  #   name: "docker container drupal default",
+  #   run: "always"
   config.vm.provision "shell",
-    path: "./vagrant/scripts/docker-mysql-default.sh",
+    path: "./scripts/docker-drupal-aabss.sh",
     args: [
-      MYSQL_CONTAINER_DEFAULT
+      DRUPAL_CONTAINER_AABSS,
+      MYSQL_CONTAINER_CUSTOM,
+      VOLUME_MOUNT
     ],
-    name: "docker container mysql default",
+    name: "docker container drupal aabss",
     run: "always"
-  config.vm.provision "shell",
-    path: "./vagrant/scripts/docker-drupal.sh",
-    args: [
-      MYSQL_CONTAINER_DEFAULT,
-      DRUPAL_CONTAINER_DEFAULT,
-      DRUPAL_VERSION_DEFAULT
-    ],
-    name: "docker container drupal default"
   
 end
